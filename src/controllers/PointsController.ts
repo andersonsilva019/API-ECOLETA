@@ -19,7 +19,7 @@ class PointsController {
       uf
     }
   
-    const insertedIds = await trx('points').insert(point)
+    const insertedIds = await trx('points').insert(point);
   
     const point_id = insertedIds[0];
   
@@ -36,6 +36,18 @@ class PointsController {
       id: point_id,
       ...point,
     });
+  }
+
+  async show(request: Request, response: Response){
+    const { id } = request.params;
+
+    const point = await knex('points').where('id', id).first();
+
+    if(!point){
+      return response.status(400).json({ message: 'Point not found' });
+    }
+
+    return response.json(point);
   }
 }
 
